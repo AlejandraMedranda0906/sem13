@@ -3,18 +3,18 @@
   - Sentencia:
   ```
   CREATE OR REPLACE FUNCTION validar_cedula() RETURNS TRIGGER AS $$
-BEGIN
-    IF NOT (NEW.nui ~ '^\d{10}$') THEN
-        RAISE EXCEPTION 'El número de cédula debe tener 10 dígitos.';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+  BEGIN
+  IF NOT (NEW.nui ~ '^\d{10}$') THEN
+  RAISE EXCEPTION 'El número de cédula debe tener 10 dígitos.';
+  END IF;
+  RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER validar_cedula_trigger
-BEFORE INSERT OR UPDATE ON client
-FOR EACH ROW
-EXECUTE PROCEDURE validar_cedula();
+  CREATE TRIGGER validar_cedula_trigger
+  BEFORE INSERT OR UPDATE ON client
+  FOR EACH ROW
+  EXECUTE PROCEDURE validar_cedula();
 
   ```
   - Captura:
@@ -25,18 +25,18 @@ EXECUTE PROCEDURE validar_cedula();
   - Sentencia:
   ```
   CREATE OR REPLACE FUNCTION decrease_stock() RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE product
-    SET stock = stock - NEW.quantity
-    WHERE id = NEW.product_id;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+  BEGIN
+  UPDATE product
+  SET stock = stock - NEW.quantity
+  WHERE id = NEW.product_id;
+  RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER decrease_stock_trigger
-AFTER INSERT ON detail
-FOR EACH ROW
-EXECUTE PROCEDURE decrease_stock();
+  CREATE TRIGGER decrease_stock_trigger
+  AFTER INSERT ON detail
+  FOR EACH ROW
+  EXECUTE PROCEDURE decrease_stock();
 
   ```
   - Captura:
@@ -50,7 +50,7 @@ EXECUTE PROCEDURE decrease_stock();
   RETURNS TRIGGER AS $$
   BEGIN
   IF EXTRACT(YEAR FROM NEW.create_at) != EXTRACT(YEAR FROM CURRENT_DATE) THEN
-    RAISE EXCEPTION 'La fecha de creación (create_at) debe ser del año actual.';
+  RAISE EXCEPTION 'La fecha de creación (create_at) debe ser del año actual.';
   END IF;
   RETURN NEW;
   END;
@@ -70,7 +70,7 @@ EXECUTE PROCEDURE decrease_stock();
   CREATE OR REPLACE FUNCTION valida_email() RETURNS TRIGGER AS $$
   BEGIN
   IF POSITION('@' IN NEW.email) = 0 THEN
-    RAISE EXCEPTION 'Su correo electrónico debe tener un @.';
+  RAISE EXCEPTION 'Su correo electrónico debe tener un @.';
   END IF;
   RETURN NEW;
   END;
@@ -83,4 +83,4 @@ EXECUTE PROCEDURE decrease_stock();
   ```
   - Captura:
 
-<img src="./capturas_tas13/trigger_04.pjg" alt="drawing" width="500"/>
+<img src="./capturas_tas13/trigger_04.jpg" alt="drawing" width="500"/>
